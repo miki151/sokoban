@@ -1,13 +1,7 @@
 # Sokoban
 This is a random sokoban level generator. It doesn't have any external dependencies. You'll need a c++11 compiler, such as gcc or clang, to compile it.
 
-## Algorithm
-
-Initially, boulders are placed at their destinations, and the algorithm pulls them in random directions to simulate the game in reverse.
-Backtracking is used when the algorithm gets stuck.<br><br>
-After a set number of positions is analyzed, the algorithm returns the most distant solution from the initial configuration, counting the number of moves.
-For the lack of a good evaluating function, we assume the number of moves it took to reach a position is correlated with its difficulty. Note: solving a position almost always takes much fewer moves than the algorithm took to generate it.<br><br>
-The program runs many iterations and prints the solution of the greatest assumed difficulty after it's finished.
+## Level layout
 
 Each level consists of a fixed "prize" room, a corridor of holes, where the boulders are to be moved by the player, and a group of connected rooms containing boulders, and the player's starting position. The number of rooms and their positioning can be tweaked via command line.
 
@@ -23,6 +17,15 @@ Each level consists of a fixed "prize" room, a corridor of holes, where the boul
 #######...##################
 ############################
 ```
+
+## Algorithm
+
+Initially, boulders are placed at their destinations, and the algorithm pulls them in random directions to simulate the game in reverse.
+Backtracking is used when the algorithm gets stuck.<br><br>
+After a set number of positions is analyzed, the algorithm returns the most distant solution from the initial configuration, counting the number of moves.
+For the lack of a good evaluating function, we assume the number of moves it took to reach a position is correlated with its difficulty. Note: solving a position almost always takes much fewer moves than the algorithm took to generate it.<br><br>
+The program runs many iterations and prints the solution of the greatest assumed difficulty after it's finished.
+
 ## Usage
 
 To compile and run, simply enter:
