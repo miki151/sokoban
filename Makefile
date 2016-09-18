@@ -1,8 +1,10 @@
 
 
-CFLAGS = -Wall -std=c++11 -Wno-sign-compare -Wno-unused-variable -Wno-unused-function -Wfatal-errors -Wno-shift-count-overflow -Wno-tautological-constant-out-of-range-compare -g
+CFLAGS = -Wall -std=c++11 -Wno-sign-compare -Wno-unused-variable -Wno-unused-function -Wfatal-errors -Wno-shift-count-overflow -Wno-tautological-constant-out-of-range-compare
 
-CLANG = true
+#CLANG = true
+OPT=true
+DBG=true
 
 ifdef CLANG
 CC = clang++
@@ -12,8 +14,6 @@ else
 CC = g++
 LD = g++
 endif
-
-LDFLAGS += -fuse-ld=gold
 
 ifdef SANITIZE_ADDRESS
 CFLAGS += -fsanitize=address
@@ -39,11 +39,9 @@ IPATH = -I.
 
 CFLAGS += $(IPATH)
 
-LDFLAGS += -L/usr/local/lib
-
 SRCS = $(shell ls -t src/*.cpp)
 
-LIBS = -L/usr/lib/x86_64-linux-gnu -lpthread
+LIBS = -lpthread
 
 
 OBJS = $(addprefix $(OBJDIR)/,$(SRCS:.cpp=.o))
@@ -61,8 +59,8 @@ $(NAME): $(OBJS)
 	$(LD) $(CFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-	$(RM) $(OBJDIR)/*.o
-	$(RM) $(OBJDIR)/*.d
+	$(RM) $(OBJDIR)/src/*.o
+	$(RM) $(OBJDIR)/src/*.d
 	$(RM) $(NAME)
 
 -include $(DEPS)

@@ -8,13 +8,14 @@ class SokobanMaker {
   SokobanMaker(RandomGen& random, Vec2 levelSize, int numBoulders, int numNodes);
 
   SokobanMaker& setNumRooms(int);
+  SokobanMaker& setNumDoors(int);
 
   bool make();
   Table<char> getResult();
   int getMaxDepth();
 
   private:
-  void prepareBoulderRooms(Rectangle area, Range mainWidth, Range otherWidth, int numOther);
+  void prepareBoulderRooms(Rectangle area, Range mainWidth, Range otherWidth);
   int middleLine;
   Rectangle workArea = Rectangle(1, 1);
   vector<Vec2> boulders;
@@ -30,5 +31,6 @@ class SokobanMaker {
   int numBoulders;
   DistanceTable distanceTable;
   int numRooms = 3;
+  int numDoors = 12345;
 };
 

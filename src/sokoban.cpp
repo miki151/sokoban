@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void SokobanMaker::prepareBoulderRooms(Rectangle area, Range mainWidth, Range otherWidth, int numOther) {
+void SokobanMaker::prepareBoulderRooms(Rectangle area, Range mainWidth, Range otherWidth) {
   Vec2 mainSize(random.get(mainWidth), random.get(mainWidth));
   Vec2 mainPos((area.width() - mainSize.x) / 2, (area.height() - mainSize.y) / 2);
   Rectangle mainRect(mainPos, mainPos + mainSize);
@@ -16,13 +16,13 @@ void SokobanMaker::prepareBoulderRooms(Rectangle area, Range mainWidth, Range ot
   for (int i : Range(4))
     roomSides.push_back(i);
   roomSides = random.permutation(roomSides);
-  for (int i = 0; i < numOther; ++i) {
+  for (int i = 0; i < numRooms - 1; ++i) {
     Vec2 size;
     do {
       size = Vec2(random.get(otherWidth), random.get(otherWidth));
     } while (size.x <= 2 && size.y <= 2);
     Vec2 pos;
-    bool door = i == 0;
+    bool door = (i < numDoors);
     switch (roomSides[i % 4]) {
       case 0:
         pos = Vec2(mainRect.right(), random.get(
@@ -77,6 +77,11 @@ SokobanMaker&SokobanMaker::setNumRooms(int r) {
   return *this;
 }
 
+SokobanMaker&SokobanMaker::setNumDoors(int d) {
+  numDoors = d;
+  return *this;
+}
+
 static void printLevel(const Table<char>& level) {
   for (int y : level.getBounds().getYRange()) {
     for (int x : level.getBounds().getXRange())
@@ -91,8 +96,7 @@ bool SokobanMaker::make() {
     level[v] = '#';
   int prizeRoomRadius = 1;
   int boulderRoomWidth = level.getBounds().width() - 1 - 2 * prizeRoomRadius - 1 - numBoulders;
-  prepareBoulderRooms(Rectangle(area.topLeft(), Vec2(boulderRoomWidth, area.height())),
-                      Range(3, 5), Range(2, 4), numRooms - 1);
+  prepareBoulderRooms(Rectangle(area.topLeft(), Vec2(boulderRoomWidth, area.height())), Range(3, 5), Range(2, 4));
   //printLevel(level);
   Vec2 start;
   for (int x : area.getXRange().shorten(prizeRoomRadius).reverse())
@@ -161,8 +165,8 @@ void SokobanMaker::moveBoulder(int depth, Vec2& curPos, set<int>& visited) {
         continue;
       Vec2 pos = boulderPos + v;
       Vec2 dest(-100, -1);
-      for (int i = 1; isFree(pos + v * i) && !random.roll(4) && (v.x <= 0 || pos.x + v.x * i <= middleLine); ++i)
-        dest = pos + v * i;
+      for (int i = 1; isFree(pos + v * i) && (v.x <= 0 || pos.x + v.x * i <= middleLine); ++i)
+        dest = pos + v * random.get(1, i + 1);
       if (dest.x == -100)
         continue;
       CHECK(level[dest] == '.');
