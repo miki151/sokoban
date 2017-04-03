@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <memory>
 #include <cassert>
+#include <random>
 
 using namespace std;
 
@@ -147,7 +148,7 @@ class RandomGen {
   }
 
   private:
-  default_random_engine generator;
+  std::default_random_engine generator;
   std::uniform_real_distribution<double> defaultDist;
 
   template <typename T>
@@ -323,7 +324,7 @@ class Table {
   int getHeight() const {
     return bounds.h;
   }
- 
+
   T& operator[](const Vec2& vAbs) {
     CHECK(vAbs.inRectangle(bounds));
     return mem[(vAbs.x - bounds.px) * bounds.h + vAbs.y - bounds.py];
