@@ -14,6 +14,7 @@ else
 CC = g++
 LD = g++
 endif
+RMDIR=rmdir
 MKDIR=mkdir
 
 ifdef SANITIZE_ADDRESS
@@ -63,6 +64,8 @@ $(NAME): $(OBJS)
 clean:
 	$(RM) $(OBJDIR)/src/*.o
 	$(RM) $(OBJDIR)/src/*.d
+	$(RMDIR) $(OBJDIR)/src/
+	$(RMDIR) $(OBJDIR)/
 	$(RM) $(NAME)
 
 -include $(DEPS)
