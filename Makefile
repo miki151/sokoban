@@ -14,6 +14,8 @@ else
 CC = g++
 LD = g++
 endif
+RMDIR=rmdir
+MKDIR=mkdir
 
 ifdef SANITIZE_ADDRESS
 CFLAGS += -fsanitize=address
@@ -53,6 +55,7 @@ DEPS = $(addprefix $(OBJDIR)/,$(SRCS:.cpp=.d))
 all: $(NAME)
 
 $(OBJDIR)/%.o: %.cpp ${PCH}
+	-$(MKDIR) -p $(dir $@)
 	$(CC) -MMD $(CFLAGS) $(PCHINC) -c $< -o $@
 
 $(NAME): $(OBJS)
@@ -61,6 +64,8 @@ $(NAME): $(OBJS)
 clean:
 	$(RM) $(OBJDIR)/src/*.o
 	$(RM) $(OBJDIR)/src/*.d
+	$(RMDIR) $(OBJDIR)/src/
+	$(RMDIR) $(OBJDIR)/
 	$(RM) $(NAME)
 
 -include $(DEPS)
